@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class DestroyEnemy : MonoBehaviour
 {
+
     private Rigidbody2D rb2d;
+    public float bounce = 15f;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,10 +24,10 @@ public class DestroyEnemy : MonoBehaviour
     {
         if(other.tag == "Player")
         {
-            //if(other.GetComponent<Rigidbody2D>().velocity.y <= 0f)
-            //{
-            //    other.GetComponent<Rigidbody2D>().velocity = new Vector2(rb2d.velocity.x, other.);
-            //}
+            if (other.GetComponent<Rigidbody2D>().velocity.y <= 0f)
+            {
+                other.GetComponent<Rigidbody2D>().velocity = new Vector2(rb2d.velocity.x, bounce);
+            }
             Destroy(this.gameObject);
         }
     }
