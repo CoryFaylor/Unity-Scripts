@@ -1,0 +1,78 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using TMPro;
+
+public class DialogueTrigger : MonoBehaviour
+{
+    //public float waitTime;
+    public TextMeshProUGUI textDisplay;
+    public string[] sentences;
+    private int index;
+    public float typingSpeed;
+    public GameObject continueButton;
+    //private AudioSource source;
+    // Start is called before the first frame update
+    void Start()
+    {
+        //source = GetComponent<AudioSource>();
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (textDisplay.text == sentences[index])
+        {
+            continueButton.SetActive(true);
+        }
+    }
+
+    IEnumerator Type()
+    {
+        foreach (char letter in sentences[index].ToCharArray())
+        {
+            textDisplay.text += letter;
+            yield return new WaitForSeconds(typingSpeed);
+        }
+    }
+
+    IEnumerator WaitToTalk()
+    {
+        yield return new WaitForSeconds(5f);
+    }
+
+    public void NextSentence()
+    {
+        //source.Play();
+        continueButton.SetActive(false);
+
+        if (index < sentences.Length - 1)
+        {
+            index++;
+            textDisplay.text = "";
+            StartCoroutine(Type());
+        }
+        else
+        {
+            textDisplay.text = "";
+            continueButton.SetActive(false);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            StartCoroutine(WaitToTalk());
+
+            Vector3 theScale = transform.localScale;
+            theScale.x *= -1;
+            transform.localScale = theScale;
+
+            StartCoroutine(Type());
+        }
+    }
+
+
+}
