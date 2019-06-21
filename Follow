@@ -1,0 +1,51 @@
+using UnityEngine;
+using System.Collections;
+
+public class Follow : MonoBehaviour
+{
+    public Transform Character;
+    public float speed = 0.1F;
+    private Vector3 directionOfCharacter;
+    public float range = 10f;
+    private bool challenged = false; // Check if in aggro range
+    private bool facingLeft = true;
+
+    void Update()
+    {
+        if (challenged)
+        {
+            // Get direction to move towards
+            directionOfCharacter = Character.transform.position - transform.position;
+            directionOfCharacter = directionOfCharacter.normalized;
+
+            transform.Translate(directionOfCharacter * speed, Space.World);
+        }
+
+        if (Vector3.Distance(Character.position, transform.position) <= range)
+        {
+            challenged = true;
+        }
+    }
+
+    public void Flip()
+    {
+        // Switch the way the the enemy is labelled as facing.
+        facingLeft = !facingLeft;
+
+        // Multiply the x local scale by -1.
+        Vector3 theScale = transform.localScale;
+        theScale.x *= -1;
+        transform.localScale = theScale;
+    }
+
+
+    // trigger on player hit
+    //void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.CompareTag("Player"))
+    //    {
+    //        challenged = true;
+    //    }
+    //}
+}
+
