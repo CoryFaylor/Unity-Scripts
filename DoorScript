@@ -1,0 +1,52 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class DoorScript : MonoBehaviour
+{
+    public bool door = false;
+    public float waitTime = 1.5f;
+    public Animator transitionAnim;
+    public string sceneName;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        //localDoor.GetComponent<DoorSceneTransition>().door == true
+        if (door == true && Input.GetKeyDown(KeyCode.E))
+        {
+            StartCoroutine(Loadscene());
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            door = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            door = false;
+        }
+    }
+
+    IEnumerator Loadscene()
+    {
+        transitionAnim.SetTrigger("end");
+        yield return new WaitForSeconds(waitTime);
+        SceneManager.LoadScene(sceneName);
+    }
+
+}
