@@ -8,7 +8,14 @@ public class Follow : MonoBehaviour
     private Vector3 directionOfCharacter;
     public float range = 10f;
     private bool challenged = false; // Check if in aggro range
-    private bool facingLeft = true;
+    private bool facingRight = false;
+    public GameObject player;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        player = GameObject.Find("Player");
+    }
 
     void Update()
     {
@@ -25,18 +32,33 @@ public class Follow : MonoBehaviour
         {
             challenged = true;
         }
+
+        if (player.transform.position.x < gameObject.transform.position.x && facingRight)
+            Flip();
+        if (player.transform.position.x > gameObject.transform.position.x && !facingRight)
+            Flip();
     }
 
-    public void Flip()
+
+    void Flip()
     {
-        // Switch the way the the enemy is labelled as facing.
-        facingLeft = !facingLeft;
-
-        // Multiply the x local scale by -1.
-        Vector3 theScale = transform.localScale;
-        theScale.x *= -1;
-        transform.localScale = theScale;
+        //here your flip funktion, as example
+        facingRight = !facingRight;
+        Vector3 tmpScale = gameObject.transform.localScale;
+        tmpScale.x *= -1;
+        gameObject.transform.localScale = tmpScale;
     }
+
+    //public void Flip()
+    //{
+    //    // Switch the way the the enemy is labelled as facing.
+    //    facingLeft = !facingLeft;
+
+    //    // Multiply the x local scale by -1.
+    //    Vector3 theScale = transform.localScale;
+    //    theScale.x *= -1;
+    //    transform.localScale = theScale;
+    //}
 
 
     // trigger on player hit
@@ -48,4 +70,3 @@ public class Follow : MonoBehaviour
     //    }
     //}
 }
-
